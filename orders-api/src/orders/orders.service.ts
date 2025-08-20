@@ -22,7 +22,7 @@ export class OrdersService {
 
 	async findOrderById(id: string): Promise<Order> {
 		return await this.ordersRepository.findOne({
-			where: { id },
+			where: { id, deletedAt: null },
 			include: [{ model: OrderItem }],
 		});
 	}
@@ -41,6 +41,17 @@ export class OrdersService {
 				order: [['createdAt', 'DESC'], ['id', 'ASC']],
 			},
 		);
+	}
+
+	async advanceOrder(id: string): Promise<void> {
+		try {
+			const order = await this.ordersRepository.findOne({
+				where: { id, deletedAt: null },
+			});
+			return await this.orderWithItemsRepository.updateOrderStatus(order)
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 

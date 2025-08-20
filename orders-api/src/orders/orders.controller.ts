@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UsePipes, ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UsePipes, ValidationPipe, ParseUUIDPipe, Patch } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ListOrdersQueryDto } from './dto/list-orders.query.dto';
@@ -22,6 +22,11 @@ export class OrdersController {
 	@UsePipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }))
 	async list(@Query() query: ListOrdersQueryDto) {
 		return this.ordersService.listOrders(query);
+	}
+
+	@Patch(':id/advance')
+	async advance(@Param('id', new ParseUUIDPipe()) id: string) {
+		return this.ordersService.advanceOrder(id);
 	}
 }
 

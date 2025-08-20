@@ -11,7 +11,7 @@ import type {
 
 export class BaseRepository<T extends Model> {
 	protected readonly model: ModelStatic<T>;
-	private readonly logger = new Logger(BaseRepository.name);
+	protected readonly logger = new Logger(BaseRepository.name);
 
 	constructor(model: ModelStatic<T>) {
 		this.model = model;
@@ -78,6 +78,23 @@ export class BaseRepository<T extends Model> {
 			return affectedRows[0];
 		} catch (error) {
 			this.logger.error(`updateOne failed for ${this.model.name}`, (error as Error).stack);
+			throw error;
+		}
+	}
+
+	async updateMany(
+		values: Record<string, any>,
+		where: WhereOptions<Attributes<T>>,
+		transaction?: Transaction,
+	): Promise<number> {
+		try {
+			const [affectedCount] = await this.model.update(values, {
+				where,
+				transaction,
+			});
+			return affectedCount;
+		} catch (error) {
+			this.logger.error(`updateMany failed for ${this.model.name}`, (error as Error).stack);
 			throw error;
 		}
 	}
