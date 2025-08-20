@@ -22,10 +22,11 @@ export class OrdersService {
 	}
 
 	async findOrder(id: string): Promise<Order> {
-		return await this.ordersRepository.findOne({
+		const order = await this.ordersRepository.findOne({
 			where: { id, deletedAt: null },
 			include: [{ model: OrderItem }],
-		});
+		});		
+		return order;
 	}
 
 	async listOrders() {
@@ -54,7 +55,7 @@ export class OrdersService {
 			value: order,
 		}));
 		await this.cacheService.setMany(cacheEntries);
-		return result;
+		return result
 	}
 
 	async advanceOrder(id: string): Promise<void> {
