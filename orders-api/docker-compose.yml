@@ -31,11 +31,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_DB=${POSTGRES_DB:-orders_api}
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - .:/app
       - /app/node_modules
-    command: ["npm", "run", "start:dev"]
 
 volumes:
   db_data:
