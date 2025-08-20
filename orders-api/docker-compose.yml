@@ -35,6 +35,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    command: ["sh", "-c", "npx ts-node -r dotenv/config ./node_modules/.bin/sequelize db:migrate && npm run start:dev"]
 
 volumes:
   db_data:

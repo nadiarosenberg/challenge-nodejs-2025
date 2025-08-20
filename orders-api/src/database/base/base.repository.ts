@@ -111,8 +111,11 @@ export class BaseRepository<T extends Model> {
 			transaction?: Transaction;
 		},
 	): Promise<{
-		data: TModel[];
-		meta: { page: number; limit: number; total: number; totalPages: number };
+		results: TModel[];
+		page: number;
+		limit: number;
+		totalPages: number;
+		total: number;
 	}> {
 		try {
 			const page = Math.max(1, options.page ?? 1);
@@ -128,7 +131,7 @@ export class BaseRepository<T extends Model> {
 			});
 			const total = Array.isArray(count) ? (count as any[]).length : (count as number);
 			const totalPages = Math.max(1, Math.ceil(total / limit));
-			return { data: rows as TModel[], meta: { page, limit, total, totalPages } };
+			return { results: rows as TModel[], page, limit, totalPages, total };
 		} catch (error) {
 			this.logger.error(`paginate failed for ${model.name}`, (error as Error).stack);
 			throw error;

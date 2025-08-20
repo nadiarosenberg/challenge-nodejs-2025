@@ -4,7 +4,6 @@ import { Sequelize, Transaction } from 'sequelize';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { OrderItemsRepository } from './order-items.repository';
-import { OrderStatus } from '../entities/order.types';
 import type { Order } from '../entities/order.model';
 import { OrderItem } from '../entities/order-item.model';
 
@@ -21,10 +20,7 @@ export class OrderWithItemsRepository {
     try {
       tx = await this.sequelize.transaction();
       const order = await this.ordersRepository.createOne(
-        {
-          clientName: input.clientName,
-          status: OrderStatus.INITIATED,
-        } as any,
+        input,
         tx,
       );
       const items = input.items.map((i) => ({ ...i, orderId: order.id}));
