@@ -16,7 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package*.json ./
 COPY . .
 
-EXPOSE 3001
+EXPOSE ${HTTP_PORT:-3001}
 
 # Install netcat for health check
 RUN apk add --no-cache netcat-openbsd

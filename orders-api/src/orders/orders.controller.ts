@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, Query, UsePipes, ValidationPipe, ParseUUIDPipe, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe, ParseUUIDPipe, Patch } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { ListOrdersQueryDto } from './dto/list-orders.query.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -15,13 +14,12 @@ export class OrdersController {
 
 	@Get(':id')
 	async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-		return this.ordersService.findOrderById(id);
+		return this.ordersService.findOrder(id);
 	}
 
 	@Get()
-	@UsePipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }))
-	async list(@Query() query: ListOrdersQueryDto) {
-		return this.ordersService.listOrders(query);
+	async list() {
+		return this.ordersService.listOrders();
 	}
 
 	@Patch(':id/advance')

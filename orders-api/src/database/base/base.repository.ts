@@ -34,6 +34,19 @@ export class BaseRepository<T extends Model> {
 		}
 	}
 
+	async findAll(
+		options?: FindOptions,
+		transaction?: Transaction,
+	): Promise<T[]> {
+		try {
+			const rows = await this.model.findAll({ ...options, transaction });
+			return rows.map(row => row.get({ plain: true }) as T);
+		} catch (error) {
+			this.logger.error(`findAll failed for ${this.model.name}`, (error as Error).stack);
+			throw error;
+		}
+	}
+
 	async createOne(values: CreationAttributes<T>, transaction?: Transaction): Promise<T> {
 		try {
 			const created = await this.model.create(values as any, { transaction });
