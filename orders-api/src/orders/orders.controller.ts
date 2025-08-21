@@ -24,6 +24,10 @@ import { Order } from './entities/order.model';
 
 @ApiTags('orders')
 @Controller('v1/orders')
+@ApiResponse({
+  status: HttpStatus.INTERNAL_SERVER_ERROR,
+  description: 'Centralized error handling: All endpoints may return 500 for database, validation, or unexpected errors',
+})
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
@@ -40,7 +44,11 @@ export class OrdersController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input data',
+    description: 'Invalid input data or validation failed',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Database operation failed or unexpected error occurred',
   })
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }))
   async create(@Body() dto: CreateOrderDto): Promise<OrderResponseDto> {
@@ -68,7 +76,11 @@ export class OrdersController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid UUID format',
+    description: 'Invalid UUID format or validation failed',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Database operation failed or unexpected error occurred',
   })
   async findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<OrderResponseDto> {
     return this.ordersService.findOrder(id);
@@ -83,6 +95,10 @@ export class OrdersController {
     status: HttpStatus.OK,
     description: 'Orders retrieved successfully',
     type: [OrderResponseDto],
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Database operation failed, cache error, or unexpected error occurred',
   })
   async list(): Promise<Order[]> {
     return this.ordersService.listOrders();
@@ -112,7 +128,11 @@ export class OrdersController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid UUID format',
+    description: 'Invalid UUID format or validation failed',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Database operation failed, cache error, or unexpected error occurred',
   })
   async advance(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.ordersService.advanceOrder(id);

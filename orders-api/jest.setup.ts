@@ -1,0 +1,22 @@
+// Jest setup file to configure environment variables for tests
+process.env.HTTP_PORT = '3001';
+process.env.POSTGRES_HOST = 'localhost';
+process.env.POSTGRES_PORT = '5432';
+process.env.POSTGRES_USER = 'test';
+process.env.POSTGRES_PASSWORD = 'test';
+process.env.POSTGRES_DB = 'test_db';
+process.env.REDIS_HOST = 'localhost';
+process.env.REDIS_PORT = '6379';
+process.env.REDIS_EXTERNAL_PORT = '6379';
+process.env.CACHE_TTL = '3600';
+process.env.REDIS_CONNECT_TIMEOUT = '10000';
+process.env.REDIS_COMMAND_TIMEOUT = '5000';
+process.env.HEALTHCHECK_INTERVAL = '30s';
+process.env.HEALTHCHECK_TIMEOUT = '10s';
+process.env.HEALTHCHECK_RETRIES = '3';
+process.env.ORDER_HARD_DELETE_DAYS = '7';
+process.env.CACHE_ORDERS_KEY = 'orders:hash';
+process.env.DB_POOL_MAX = '5';
+process.env.DB_POOL_MIN = '0';
+process.env.DB_POOL_ACQUIRE = '30000';
+process.env.DB_POOL_IDLE = '10000';

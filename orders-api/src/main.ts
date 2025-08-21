@@ -30,14 +30,14 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
 
-    const port = configService.get<number>('HTTP_PORT') || 3001;
+    const port = configService.get<number>('HTTP_PORT')!;
     await app.listen(port);
     
     logger.log(`🚀 Application is running on: http://localhost:${port}`);
     logger.log(`📚 Swagger documentation available at: http://localhost:${port}/api/docs`);
   } catch (error) {
     logger.error('Failed to start application:', error);
-    process.exit(1);
+    throw error;
   }
 }
 

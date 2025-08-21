@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/sequelize';
 import { Sequelize, Transaction } from 'sequelize';
 import { CreateOrderDto } from '../dto/create-order.dto';
@@ -31,7 +31,7 @@ export class OrderWithItemsRepository {
       return fullOrder;
     } catch (error) {
       if (tx) await tx.rollback();
-      throw new InternalServerErrorException('Failed to create order');
+      throw new Error(error as any);
     }
   }
 
@@ -59,7 +59,7 @@ export class OrderWithItemsRepository {
       if (tx) await tx.commit();
     } catch (error) {
       if (tx) await tx.rollback();
-      throw error;
+      throw new Error(error as any);
     }
   }
 
@@ -81,7 +81,7 @@ export class OrderWithItemsRepository {
       await tx.commit();
     } catch (error) {
       if (tx) await tx.rollback();
-      throw error;
+      throw new Error(error as any);
     }
   }
 }

@@ -5,7 +5,7 @@ export default registerAs('database', () => ({
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
+  port: parseInt(process.env.POSTGRES_PORT!, 10),
   dialect: 'postgres',
   migrationStorageTableName: 'sequelize_meta',
 }));

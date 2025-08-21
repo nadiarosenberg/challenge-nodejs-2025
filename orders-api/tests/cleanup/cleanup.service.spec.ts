@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { CleanupService } from '../../src/cleanup/cleanup.service';
 import { OrdersRepository } from '../../src/orders/repositories/orders.repository';
 import { OrderWithItemsRepository } from '../../src/orders/repositories/order-with-items.repository';
-import { Logger, BadRequestException } from '@nestjs/common';
+import { Logger, InternalServerErrorException } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { mockCompleteOrder } from '../orders/common';
 
@@ -89,7 +89,7 @@ describe('CleanupService', () => {
     });
     it('should throw if some error in main process occurs', async () => {
       jest.spyOn(ordersRepository, 'findAll').mockRejectedValue(new Error('Database connection error'));
-      await expect(service.cleanupDeletedOrders()).rejects.toThrow(BadRequestException);
+      await expect(service.cleanupDeletedOrders()).rejects.toThrow(InternalServerErrorException);
     });
   });
 });

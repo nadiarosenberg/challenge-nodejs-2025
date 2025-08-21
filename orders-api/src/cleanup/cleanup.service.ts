@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { InternalServerErrorException, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { subDays } from 'date-fns';
@@ -16,13 +16,14 @@ export class CleanupService {
     private readonly orderWithItemsRepository: OrderWithItemsRepository,
   ) {}
 
-  @Cron('0 3 * * *')
+  @Cron('0 3 * * *') 
   async cleanupDeletedOrders(): Promise<void> {
     const now = new Date();
     const cutoffDate = subDays(now, this.configService.get<number>('ORDER_HARD_DELETE_DAYS')!);
     this.logger.log('Starting cleanup of deleted orders, limit date:', cutoffDate.toISOString());
     try {
       const ordersToDelete = await this.ordersRepository.findAll({
+        paranoid: false,
         where: {
           deletedAt: { [Op.lt]: cutoffDate },
         },
@@ -55,7 +56,7 @@ export class CleanupService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       this.logger.error(`Error during cleanup process: ${message}`);
-      throw new BadRequestException(message);
+      throw new InternalServerErrorException(message);
     }
   }
 }

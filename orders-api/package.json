@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nest build && node dist/main.js",
-    "start:dev": "ts-node -r tsconfig-paths/register src/main.ts",
+    "start:dev": "ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "build": "nest build",
     "lint": "eslint '{src,apps,libs}/**/*.ts' --fix",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -15,8 +15,7 @@
     "migrate:status": "npx ts-node -r tsconfig-paths/register ./node_modules/.bin/sequelize db:migrate:status --config sequelize.config.js",
     "migrate:undo": "npx ts-node -r tsconfig-paths/register ./node_modules/.bin/sequelize db:migrate:undo --config sequelize.config.js",
     "test": "jest",
-    "test:cov": "jest --coverage",
-    "start:cron": "ts-node -r tsconfig-paths/register src/main.ts"
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",

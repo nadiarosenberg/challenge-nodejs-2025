@@ -45,7 +45,11 @@ npm run test:cov
 - `GET /api/orders/:id` - Get order by ID (includes order items)
 - `PATCH /api/orders/:id/advance` - Advance order status
 
-## Environment variables (.env example)
+## Environment variables
+
+**IMPORTANT**: All environment variables are **required**. There are no default values in `docker-compose.yml` for security.
+
+### Required variables
 ```
 # HTTP Configuration
 HTTP_PORT=3001
@@ -54,14 +58,15 @@ HTTP_PORT=3001
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=password
-POSTGRES_DB=orders_db
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=orders_api
 
 # Redis Configuration
 REDIS_HOST=redis
 REDIS_PORT=6379
 REDIS_EXTERNAL_PORT=6379
-CACHE_TTL=3600
+CACHE_TTL=30000
+CACHE_ORDERS_KEY=orders:hash
 REDIS_CONNECT_TIMEOUT=10000
 REDIS_COMMAND_TIMEOUT=5000
 
@@ -71,7 +76,13 @@ HEALTHCHECK_TIMEOUT=10s
 HEALTHCHECK_RETRIES=3
 
 # Application Configuration
-ORDER_HARD_DELETE_DAYS=30
+ORDER_HARD_DELETE_DAYS=7
+
+# Database Pool Configuration
+DB_POOL_MAX=5
+DB_POOL_MIN=0
+DB_POOL_ACQUIRE=30000
+DB_POOL_IDLE=10000
 ```
 
 ## Architecture
@@ -104,7 +115,7 @@ ORDER_HARD_DELETE_DAYS=30
 - **Relationships**: One-to-many between orders and order items
 
 ### Automated Cleanup
-- **Cron Job**: Daily execution at 3 AM UTC
+- **Cron Job**: Daily execution at 3 AM UTC (hardcoded schedule)
 - **Hard Delete**: Permanently removes orders older than `ORDER_HARD_DELETE_DAYS`
 - **Transactional**: Ensures data consistency during cleanup
 - **Error Handling**: Graceful error handling with logging
@@ -117,7 +128,6 @@ src/
 ├── config/          # Configuration files
 │   ├── database.config.ts    # Database config for NestJS ConfigModule
 │   ├── env.validation.ts     # Environment validation
-│   └── sequelize.config.js   # Sequelize CLI config (migrations)
 ├── database/        # Database configuration and base repository
 ├── orders/          # Order management module
 │   ├── dto/         # Data transfer objects

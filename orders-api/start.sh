@@ -30,4 +30,5 @@ fi
 
 # Start the application
 echo "🚀 Starting the application..."
+echo "⏰ Cleanup cron job configured: daily at 3 AM UTC"
 npm run start:dev

@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { IsString, IsNumber, validateSync } from 'class-validator';
+import { BadRequestException } from '@nestjs/common';
 
 class EnvironmentVariables {
   @IsNumber()
@@ -49,16 +50,28 @@ class EnvironmentVariables {
 
   @IsNumber()
   ORDER_HARD_DELETE_DAYS!: number;
+
+  @IsString()
+  CACHE_ORDERS_KEY!: string;
+
+  @IsNumber()
+  DB_POOL_MAX!: number;
+
+  @IsNumber()
+  DB_POOL_MIN!: number;
+
+  @IsNumber()
+  DB_POOL_ACQUIRE!: number;
+
+  @IsNumber()
+  DB_POOL_IDLE!: number;
 }
 
 export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToClass(EnvironmentVariables, config, {
     enableImplicitConversion: true,
   });
-  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
-
-  if (errors.length > 0) {
-    throw new Error(errors.toString());
-  }
+  const errors = validateSync(validatedConfig, { skipMissingProperties: false })
+  if (errors.length > 0) throw new BadRequestException(errors.toString());
   return validatedConfig;
 }

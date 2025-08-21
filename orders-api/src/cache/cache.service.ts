@@ -22,7 +22,7 @@ export class CacheService {
       return value ?? null;
     } catch (error) {
       this.logger.error(`Failed to get cache for key "${key}":`, error);
-      return null;
+      return null
     }
   }
 
@@ -54,7 +54,7 @@ export class CacheService {
       return filteredResults;
     } catch (error) {
       this.logger.error(`Failed to get many keys from cache:`, error);
-      return [];
+      return []
     }
   }
 

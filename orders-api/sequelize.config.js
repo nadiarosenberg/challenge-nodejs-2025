@@ -1,30 +1,17 @@
 require('dotenv').config();
 
+const { ConfigService } = require('@nestjs/config');
+
+const configService = new ConfigService();
+const getConfig = (key) => configService.get(key);
+
 module.exports = {
   development: {
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    host: process.env.POSTGRES_HOST,
-    port: parseInt(process.env.POSTGRES_PORT || '5432'),
-    dialect: 'postgres',
-    migrationStorageTableName: 'sequelize_meta',
-  },
-  test: {
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    host: process.env.POSTGRES_HOST,
-    port: parseInt(process.env.POSTGRES_PORT || '5432'),
-    dialect: 'postgres',
-    migrationStorageTableName: 'sequelize_meta',
-  },
-  production: {
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    host: process.env.POSTGRES_HOST,
-    port: parseInt(process.env.POSTGRES_PORT || '5432'),
+    username: getConfig('POSTGRES_USER'),
+    password: getConfig('POSTGRES_PASSWORD'),
+    database: getConfig('POSTGRES_DB'),
+    host: getConfig('POSTGRES_HOST'),
+    port: parseInt(getConfig('POSTGRES_PORT')),
     dialect: 'postgres',
     migrationStorageTableName: 'sequelize_meta',
   },

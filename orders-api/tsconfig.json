@@ -17,6 +17,8 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "types": ["node", "jest"]
