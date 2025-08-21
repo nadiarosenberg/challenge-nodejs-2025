@@ -29,6 +29,11 @@ import { CacheService } from './cache.service';
           ttl: cacheTtl,
           connectTimeout: redisConnectTimeout,
           commandTimeout: redisCommandTimeout,
+          retryStrategy: (times: number) => {
+            const delay = Math.min(times * 50, 2000);
+            return delay;
+          },
+          maxRetriesPerRequest: 3,
         };
       },
     }),

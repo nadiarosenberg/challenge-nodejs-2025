@@ -13,6 +13,6 @@ import { AppCacheModule } from '../cache/cache.module';
   imports: [SequelizeModule.forFeature([Order, OrderItem]), AppCacheModule],
   controllers: [OrdersController],
   providers: [OrdersService, OrdersRepository, OrderItemsRepository, OrderWithItemsRepository],
-  exports: [OrdersRepository, OrderItemsRepository],
+  exports: [OrdersRepository, OrderItemsRepository, OrderWithItemsRepository],
 })
 export class OrdersModule {}
