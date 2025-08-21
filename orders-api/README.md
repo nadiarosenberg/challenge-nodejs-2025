@@ -8,49 +8,10 @@ A RESTful API for managing orders built with NestJS v10, using Sequelize with Po
 
 ## Quick Start
 
-### Run with Docker
+### 1. Create Environment File
+Create a `.env` file in the root directory with the following variables (values shown are examples, you can replace them with your own):
+
 ```bash
-docker compose up -d --build
-```
-- API available at http://localhost:3001/api
-- API Documentation available at http://localhost:3001/api/docs
-
-**Note**: The application will automatically create a `.env` file with default values if it doesn't exist. You can override these values by creating your own `.env` file.
-
-### API Documentation
-Once the application is running, you can access the interactive API documentation at:
-- **Swagger UI**: http://localhost:3001/api/docs 
-
-### Run migrations (from host)
-```bash
-docker compose exec api npm run migrate
-```
-
-**Note**: Migrations use `src/config/sequelize.config.js` (JavaScript) with ConfigService integration for consistency. The CLI requires JavaScript format, while the application runtime uses `src/config/database.config.ts` (TypeScript) via ConfigModule.
-
-### Run tests
-```bash
-# Run all tests
-npm test
-
-# Run tests with coverage
-npm run test:cov
-```
-
-## API Endpoints
-
-### Orders
-- `POST /api/orders` - Create a new order
-- `GET /api/orders` - List all non-delivered orders
-- `GET /api/orders/:id` - Get order by ID (includes order items)
-- `PATCH /api/orders/:id/advance` - Advance order status
-
-## Environment variables
-
-**IMPORTANT**: All environment variables are **required**. There are no default values in `docker-compose.yml` for security.
-
-### Required variables
-```
 # HTTP Configuration
 HTTP_PORT=3001
 
@@ -84,6 +45,52 @@ DB_POOL_MIN=0
 DB_POOL_ACQUIRE=30000
 DB_POOL_IDLE=10000
 ```
+
+### 2. Run with Docker
+```bash
+docker compose up -d --build
+```
+- API available at http://localhost:3001/api/v1
+- API Documentation available at http://localhost:3001/api/docs
+
+### API Documentation
+Once the application is running, you can access the interactive API documentation at:
+- **Swagger UI**: http://localhost:3001/api/docs 
+
+### Run migrations (from host)
+Migrations run automatically when the application starts, but you can also run them manually:
+
+```bash
+docker compose exec api npm run migrate
+```
+
+**Note**: Migrations use `src/config/sequelize.config.js` (JavaScript) with ConfigService integration for consistency. The CLI requires JavaScript format, while the application runtime uses `src/config/database.config.ts` (TypeScript) via ConfigModule.
+
+### Run tests
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:cov
+```
+
+## API Endpoints
+
+### Versioning
+All API endpoints are versioned using the `/api/v1/` prefix. This ensures backward compatibility and allows for future API changes without breaking existing integrations.
+
+**Base URL**: `http://localhost:3001/api/v1`
+
+### Orders
+- `POST /api/v1/orders` - Create a new order
+- `GET /api/v1/orders` - List all non-delivered orders
+- `GET /api/v1/orders/:id` - Get order by ID (includes order items)
+- `PATCH /api/v1/orders/:id/advance` - Advance order status
+
+## Environment Variables
+
+**IMPORTANT**: All environment variables are **required**. There are no default values in `docker-compose.yml` for security. See the Quick Start section above for the complete `.env` file template.
 
 ## Architecture
 
