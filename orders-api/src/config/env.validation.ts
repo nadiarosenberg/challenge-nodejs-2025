@@ -2,62 +2,63 @@ import { plainToClass } from 'class-transformer';
 import { IsString, IsNumber, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
-	@IsNumber()
-	HTTP_PORT!: number;
+  @IsNumber()
+  HTTP_PORT!: number;
 
-	@IsString()
-	POSTGRES_HOST!: string;
+  @IsString()
+  POSTGRES_HOST!: string;
 
-	@IsNumber()
-	POSTGRES_PORT!: number;
+  @IsNumber()
+  POSTGRES_PORT!: number;
 
-	@IsString()
-	POSTGRES_USER!: string;
+  @IsString()
+  POSTGRES_USER!: string;
 
-	@IsString()
-	POSTGRES_PASSWORD!: string;
+  @IsString()
+  POSTGRES_PASSWORD!: string;
 
-	@IsString()
-	POSTGRES_DB!: string;
+  @IsString()
+  POSTGRES_DB!: string;
 
-	@IsString()
-	REDIS_HOST!: string;
+  @IsString()
+  REDIS_HOST!: string;
 
-	@IsNumber()
-	REDIS_PORT!: number;
+  @IsNumber()
+  REDIS_PORT!: number;
 
-	@IsNumber()
-	CACHE_TTL!: number;
+  @IsNumber()
+  CACHE_TTL!: number;
 
-	@IsNumber()
-	REDIS_CONNECT_TIMEOUT!: number;
+  @IsNumber()
+  REDIS_CONNECT_TIMEOUT!: number;
 
-	@IsNumber()
-	REDIS_COMMAND_TIMEOUT!: number;
+  @IsNumber()
+  REDIS_COMMAND_TIMEOUT!: number;
 
-	@IsNumber()
-	REDIS_EXTERNAL_PORT!: number;
+  @IsNumber()
+  REDIS_EXTERNAL_PORT!: number;
 
-	@IsString()
-	HEALTHCHECK_INTERVAL!: string;
+  @IsString()
+  HEALTHCHECK_INTERVAL!: string;
 
-	@IsString()
-	HEALTHCHECK_TIMEOUT!: string;
+  @IsString()
+  HEALTHCHECK_TIMEOUT!: string;
 
-	@IsNumber()
-	HEALTHCHECK_RETRIES!: number;
+  @IsNumber()
+  HEALTHCHECK_RETRIES!: number;
+
+  @IsNumber()
+  ORDER_HARD_DELETE_DAYS!: number;
 }
 
 export function validate(config: Record<string, unknown>) {
-	const validatedConfig = plainToClass(
-		EnvironmentVariables,
-		config,
-		{ enableImplicitConversion: true },
-	);
-	const errors = validateSync(validatedConfig, { skipMissingProperties: false });
+  const validatedConfig = plainToClass(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
+  });
+  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
 
-	if (errors.length > 0) {
-		throw new Error(errors.toString());
-	}
-	return validatedConfig;
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+  return validatedConfig;
 }

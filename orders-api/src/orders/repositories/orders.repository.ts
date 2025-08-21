@@ -5,7 +5,7 @@ import { BaseRepository } from '../../database/base/base.repository';
 
 @Injectable()
 export class OrdersRepository extends BaseRepository<Order> {
-	constructor(@InjectModel(Order) model: typeof Order) {
-		super(model);
-	}
+  constructor(@InjectModel(Order) model: typeof Order) {
+    super(model);
+  }
 }

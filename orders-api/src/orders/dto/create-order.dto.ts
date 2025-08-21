@@ -3,15 +3,13 @@ import { ArrayMinSize, IsArray, IsNotEmpty, IsString, ValidateNested } from 'cla
 import { CreateOrderItemDto } from './create-order-item.dto';
 
 export class CreateOrderDto {
-	@IsString()
-	@IsNotEmpty()
-	clientName!: string;
+  @IsString()
+  @IsNotEmpty()
+  clientName!: string;
 
-	@IsArray()
-	@ArrayMinSize(1)
-	@ValidateNested({ each: true })
-	@Type(() => CreateOrderItemDto)
-	items!: CreateOrderItemDto[];
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreateOrderItemDto)
+  items!: CreateOrderItemDto[];
 }
-
-

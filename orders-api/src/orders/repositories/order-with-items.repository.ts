@@ -20,15 +20,9 @@ export class OrderWithItemsRepository {
     let tx: Transaction | undefined;
     try {
       tx = await this.sequelize.transaction();
-      const order = await this.ordersRepository.createOne(
-        input,
-        tx,
-      );
-      const items = input.items.map((i) => ({ ...i, orderId: order.id}));
-      await this.orderItemsRepository.createMany(
-        items,
-        tx,
-      );
+      const order = await this.ordersRepository.createOne(input, tx);
+      const items = input.items.map((i) => ({ ...i, orderId: order.id }));
+      await this.orderItemsRepository.createMany(items, tx);
       const fullOrder = await this.ordersRepository.findOne(
         { where: { id: order.id }, include: [{ model: OrderItem }] },
         tx,
@@ -43,31 +37,51 @@ export class OrderWithItemsRepository {
 
   async updateOrderStatus(order: Order): Promise<void> {
     let tx: Transaction | undefined;
-		try {
-			tx = await this.sequelize.transaction();
-			const now = new Date();
-			if (order.status === OrderStatus.INITIATED) {
-				await this.ordersRepository.updateOne(
-					{ id: order.id },
-					{ status: OrderStatus.SENT, sentAt: now },
-					tx,
-				);	
-			} else if (order.status === OrderStatus.SENT) {
-				await this.ordersRepository.updateOne(
-					{ id: order.id },
-					{ status: OrderStatus.DELIVERED, deliveredAt: now, deletedAt: now },
-					tx,
-				);
-				await this.orderItemsRepository.updateMany({orderId: order.id}, {deletedAt: now}, tx);
-			} else {
-				throw new ConflictException('Invalid order status for advancement');
-			}
-			if (tx) await tx.commit();
-		} catch (error) {
-			if (tx) await tx.rollback();
-			throw error;
-		}
+    try {
+      tx = await this.sequelize.transaction();
+      const now = new Date();
+      if (order.status === OrderStatus.INITIATED) {
+        await this.ordersRepository.updateOne(
+          { id: order.id },
+          { status: OrderStatus.SENT, sentAt: now },
+          tx,
+        );
+      } else if (order.status === OrderStatus.SENT) {
+        await this.ordersRepository.updateOne(
+          { id: order.id },
+          { status: OrderStatus.DELIVERED, deliveredAt: now, deletedAt: now },
+          tx,
+        );
+        await this.orderItemsRepository.updateMany({ orderId: order.id }, { deletedAt: now }, tx);
+      } else {
+        throw new ConflictException('Invalid order status for advancement');
+      }
+      if (tx) await tx.commit();
+    } catch (error) {
+      if (tx) await tx.rollback();
+      throw error;
+    }
+  }
+
+  async deleteOrder(orderId: string): Promise<void> {
+    let tx: Transaction | undefined;
+    try {
+      tx = await this.sequelize.transaction();
+      await this.orderItemsRepository.model.destroy({
+        where: { orderId },
+        force: true,
+        transaction: tx,
+      });
+      await this.ordersRepository.model.destroy({
+        where: { id: orderId },
+        force: true,
+        transaction: tx,
+      });
+      
+      await tx.commit();
+    } catch (error) {
+      if (tx) await tx.rollback();
+      throw error;
+    }
   }
 }
-
-

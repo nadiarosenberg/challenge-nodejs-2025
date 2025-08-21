@@ -10,10 +10,9 @@ import { OrderWithItemsRepository } from './repositories/order-with-items.reposi
 import { AppCacheModule } from '../cache/cache.module';
 
 @Module({
-	imports: [SequelizeModule.forFeature([Order, OrderItem]), AppCacheModule],
-	controllers: [OrdersController],
-	providers: [OrdersService, OrdersRepository, OrderItemsRepository, OrderWithItemsRepository],
-	exports: [OrdersRepository, OrderItemsRepository],
+  imports: [SequelizeModule.forFeature([Order, OrderItem]), AppCacheModule],
+  controllers: [OrdersController],
+  providers: [OrdersService, OrdersRepository, OrderItemsRepository, OrderWithItemsRepository],
+  exports: [OrdersRepository, OrderItemsRepository],
 })
 export class OrdersModule {}
- 

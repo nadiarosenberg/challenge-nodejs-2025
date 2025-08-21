@@ -1,7 +1,5 @@
 export enum OrderStatus {
-	INITIATED = 'initiated',
-	SENT = 'sent',
-	DELIVERED = 'delivered',
+  INITIATED = 'initiated',
+  SENT = 'sent',
+  DELIVERED = 'delivered',
 }
-
-
